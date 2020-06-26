@@ -145,8 +145,8 @@
 ; (programmer-level 0) ; junior
 ; (programmer-level 40) ; senior
 
-(define (improveGuess n guess)
-  (displayln 322)
-  (if #f 1 2))
+; (define (improveGuess n guess)
+;   (displayln 322)
+;   (if #f 1 2))
 
-(improveGuess 2.0 1)
+; (improveGuess 2.0 1)
