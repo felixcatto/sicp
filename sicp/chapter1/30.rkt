@@ -8,8 +8,7 @@
     (if
       (= i b)
       acc
-      (let 
-        ([nextI (next i)])
+      (let ([nextI (next i)])
         (iter (+ acc (term nextI)) nextI))))
   (iter (term a) a))
 

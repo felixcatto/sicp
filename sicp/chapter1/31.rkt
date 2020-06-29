@@ -8,8 +8,7 @@
     (if
       (= i b)
       acc
-      (let 
-        ([nextEl (next i)])
+      (let ([nextEl (next i)])
         (iter (* acc (term nextEl)) nextEl))))
   (iter (term a) a))
 
@@ -17,8 +16,7 @@
   (if
     (= a b)
     (term b)
-    (let
-      ([nextEl (next a)])
+    (let ([nextEl (next a)])
       (*
         (term a)
         (productRecursive term nextEl next b)))))
