@@ -134,12 +134,12 @@
 
 
 
-(define (programmer-level n)
-  (cond
-    [(< n 10) "junior"]
-    [(<= n 20) "middle"]
-    [(> n 20) "senior"]
-    [else "??"]))
+; (define (programmer-level n)
+;   (cond
+;     [(< n 10) "junior"]
+;     [(<= n 20) "middle"]
+;     [(> n 20) "senior"]
+;     [else "??"]))
 
 ; (programmer-level 10) ; middle
 ; (programmer-level 0) ; junior
@@ -150,3 +150,15 @@
 ;   (if #f 1 2))
 
 ; (improveGuess 2.0 1)
+
+
+
+
+
+
+(define x (cons 1 2))
+(car x)
+(cdr x)
+(gcd -6 -9)
+(define y 2)
+(- y)
