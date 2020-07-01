@@ -156,9 +156,12 @@
 
 
 
-(define x (cons 1 2))
-(car x)
-(cdr x)
-(gcd -6 -9)
-(define y 2)
-(- y)
+; (define x (cons 1 2))
+; (car x)
+; (cdr x)
+; (gcd -6 -9)
+; (define y 2)
+; (- y)
+(cadr (list 1 2 3))
+(null? (cdddr (list 1 2 3)))
+(odd? 1)
