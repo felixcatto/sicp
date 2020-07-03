@@ -2,6 +2,11 @@
 (#%require racket)
 (#%require rackunit)
 
+(provide
+  prime?
+  flatmap
+  enumerateInterval)
+
 (define (square x) (* x x))
 (define (divides? a b)
   (= (remainder b a) 0))
