@@ -162,8 +162,29 @@
 ; (gcd -6 -9)
 ; (define y 2)
 ; (- y)
-(define l (list 1 2 3))
-(cadr l)
-(null? (cdddr l))
-(odd? 1)
-(map (lambda (x) (+ x x)) l)
+; (define l (list 1 2 3))
+; (cadr l)
+; (null? (cdddr l))
+; (odd? 1)
+; (map (lambda (x) (+ x x)) l)
+
+; (list 'a 'b 'c '(d e))
+; (newline)
+
+; '(d e)
+; (list 'd 'e)
+; (newline)
+
+; (eq? 'a 'a)
+; (newline)
+
+; '(a b (c d))
+; (list 'a 'b (list 'c 'd))
+
+
+(cdr '((x1 x2) (y1 y2)))
+(cadr '((x1 x2) (y1 y2)))
+(pair? (car '(a short list)))
+(equal? '(1 a 322) '(1 a 322))
+
+(car ''abracadabra)
