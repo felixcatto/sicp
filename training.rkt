@@ -182,9 +182,20 @@
 ; (list 'a 'b (list 'c 'd))
 
 
-(cdr '((x1 x2) (y1 y2)))
-(cadr '((x1 x2) (y1 y2)))
-(pair? (car '(a short list)))
-(equal? '(1 a 322) '(1 a 322))
+; (cdr '((x1 x2) (y1 y2)))
+; (cadr '((x1 x2) (y1 y2)))
+; (pair? (car '(a short list)))
+; (equal? '(1 a 322) '(1 a 322))
 
-(car ''abracadabra)
+; (car ''abracadabra)
+
+'()
+(cons 1 nil)
+
+(append (list 1 2) (list 3 4))
+(append '() (list 3 4))
+
+(foldl
+  (lambda (el acc) (+ acc el))
+  0
+  '(1 2 5))
