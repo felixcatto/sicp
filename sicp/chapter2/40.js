@@ -44,3 +44,23 @@ iflatMap = (list) => list
     []);
 iflatMap([1,2,3])
 iflatMap([1,[2,3,4],5])
+
+
+makeUser({
+  name: 'fedya',
+  class: 'swordmaster',
+})
+
+makeUser('vasya', 'royal guard')
+
+makeUser = (nameOrObject, class) => {
+  if (isObject(nameOrObject)) {
+    const object = nameOrObject;
+    return object
+  }
+  const name = nameOrObject;
+  return {
+    name,
+    class,
+  }
+}
