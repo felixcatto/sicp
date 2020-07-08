@@ -1,30 +1,59 @@
 // generics.js
-let keyBy = (array, key) => array.reduce((acc, el) => ({
-  ...acc,
-  [el[key]]: el
-}), {})
+let keyBy = (array, key) =>
+  array.reduce(
+    (acc, el) => ({
+      ...acc,
+      [el[key]]: el,
+    }),
+    {}
+  );
 
 let makeTable = (type, types) => {
-  const hasCheck = types.every(typeInfo => typeof typeInfo.check === "function");
+  const hasCheck = types.every(typeInfo => typeof typeInfo.check === 'function');
   return {
     hasCheck,
     type,
     types: keyBy(types, type),
-  }
-}
+  };
+};
 
-let makeGenericGetter = (table, getterName) => taggedEntity =>
-  table.types[taggedEntity[table.type]][getterName](taggedEntity);
+let makeGenericGetter = (table, getterName) => (taggedEntity, ...params) =>
+  table.types[taggedEntity[table.type]][getterName](taggedEntity, ...params);
 
 let makeGenericConstructor = tables => entity => {
   const tags = tables
-    .filter((table) => table.hasCheck)
-    .reduce((acc, table) => ({
-      ...acc,
-      [table.type]: Object.keys(table.types).find((type) => table.types[type].check(entity)),
-    }), {});
+    .filter(table => table.hasCheck)
+    .reduce(
+      (acc, table) => ({
+        ...acc,
+        [table.type]: Object.keys(table.types).find(type => table.types[type].check(entity)),
+      }),
+      {}
+    );
 
   return { ...entity, ...tags };
+};
+
+let makeGenericMethods = (constructorName, tables) => {
+  const getters = tables
+    .flatMap(table => {
+      const [type] = Object.keys(table.types);
+      return Object.keys(table.types[type])
+        .filter(getterName => getterName !== 'check' && getterName !== table.type)
+        .map(getterName => ({ getterName, table }));
+    })
+    .reduce(
+      (acc, { getterName, table }) => ({
+        ...acc,
+        [getterName]: makeGenericGetter(table, getterName),
+      }),
+      {}
+    );
+
+  return {
+    [constructorName]: makeGenericConstructor(tables),
+    ...getters,
+  };
 };
 
 // index.js
@@ -38,7 +67,7 @@ let fileTypes = makeTable('fileType', [
   {
     fileType: 'text',
     download: file => console.log('download text'),
-    write: file => console.log('write text'),
+    write: (file, folder) => console.log(`download text to ${folder}`),
     check: file => ['.txt', '.html'].find(ext => file.name.endsWith(ext)),
   },
 ]);
@@ -56,15 +85,11 @@ let userRoles = makeTable('role', [
   },
 ]);
 
-let result = {
-  makeFile: makeGenericConstructor([fileTypes, userRoles]),
-  write: makeGenericGetter(fileTypes, 'write'),
-  download: makeGenericGetter(fileTypes, 'download'),
-  sendToEmail: makeGenericGetter(userRoles, 'sendToEmail'),
-}
+let { makeFile, write, download, sendToEmail } = makeGenericMethods('makeFile', [fileTypes, userRoles]);
 
+write(makeFile({ name: 'vasa.txt' }), 'root');
+download(makeFile({ name: 'vasa.jpg' }));
+sendToEmail(makeFile({ name: 'vasa.jpg', role: 'admin' }));
+sendToEmail(makeFile({ name: 'vasa.jpg', role: 'common' }));
 // TODO: забиндить методы и данные, чтобы можно было вызывать file.write()
-result.write(result.makeFile({ name: 'vasa.txt' }))
-result.download(result.makeFile({ name: 'vasa.jpg' }))
-result.sendToEmail(result.makeFile({ name: 'vasa.jpg', role: 'admin' }))
-result.sendToEmail(result.makeFile({ name: 'vasa.jpg', role: 'common' }))
+// TODO: кросс методы зависящие от двух таблиц
