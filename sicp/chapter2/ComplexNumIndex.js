@@ -40,6 +40,7 @@ export const methods = {
   imagePart: makeGenericGetter(numberTypes, 'imagePart'),
   magnitude: makeGenericGetter(numberTypes, 'magnitude'),
   angle: makeGenericGetter(numberTypes, 'angle'),
+  angle: number => numberTypes[getType(number)]['angle'](getContent(number)),
 };
 
 // usage
@@ -96,13 +97,22 @@ cnum.realPart();
 /*
   В "data driven"
   соответсвие между типом данных и функцией, работающей с этим типом
-  ищется в динамике, т.е. во время вызова realPart(cnum). Поэтому
-  нам нужно в конструкторе аттачить тип, чтобы потом по этому типу
-  найти методы, работающие с этим типом.
+  ищется в динамике, т.е. во время вызова realPart(cnum). 
+  Минус: 
+  поэтому нам нужно в конструкторе (и всех методах возвращающих этот тип)
+  аттачить тип, чтобы потом по этому типу найти методы, которые с ним работают.
+  Если у нас нет контроля над библиотекой, реализующей операции, 
+  мы можем обернуть все ее методы в декораторы добавляющие метку типа.
+  import { addComplex as addComplexLib } from 'complex-num'
+  export const addComplex = (num1, num2) => ({
+    type: 'complex',
+    value: addComplexLib(num1, num2),
+  })
 
   В "message passing"
   мы на этапе создания связываем тип и методы, поэтому искать ничего не надо.
-  Также не нужно в конструкторе дополнительно аттачить тип. Минус в том, что
+  Также не нужно в конструкторе дополнительно аттачить тип. 
+  Минус:
   если мы захотим диспатчить не только по одному типу 
   (rectangular/polar)
   cnum.realPart()
@@ -120,4 +130,61 @@ cnum.realPart();
 
   Вывод: если данные могут иметь несколько типов, т.е. функции для работы
   с ними зависят от нескольких типов, то лучше не использовать "message passing"
+*/
+
+// Generic ariphmethics
+`
+add
++ / addRat / addComplex
+`;
+
+const GenArTable = {
+  integer: {
+    add: addInt,
+    sub: subInt,
+    mul: mulInt,
+    div: divInt,
+    makeInteger: n => ({ type: 'integer', value: n }),
+  },
+  rational: {
+    add: addRat,
+    sub: subRat,
+    mul: mulRat,
+    div: divRat,
+    makeRational: (n, d) => ({
+      type: 'rational',
+      value: makeRat(n, d),
+    }),
+  },
+  complex: {
+    add: addComplex,
+    sub: subComplex,
+    mul: mulComplex,
+    div: divComplex,
+    makeFromRealImag: (x, y) => ({
+      type: 'complex',
+      value: table['rectangular']['makeFromRealImag'](x, y),
+    }),
+    makeFromMagAng: (r, a) => ({
+      type: 'complex',
+      value: table['polar']['makeFromMagAng'](r, a),
+    }),
+  },
+};
+
+const add = (x, y) => {
+  const type = getType(x);
+  const addFunc = GenArTable[type]['add'];
+  return addFunc(x, y);
+};
+
+const makeInteger = n => GenArTable['integer']['makeInteger'](n);
+const makeFromRealImag = (x, y) => GenArTable['complex']['makeFromRealImag'](x, y);
+
+/*
+  Все контструкторы имеют различные имена. Т.е. во время создания num
+  мы должны знать его тип и вручную вызывать соответсвующий make
+  makeRational(num)
+  Если мы хотим иметь общий makeNum(n), который сам разберется каким типом
+  отметить num, то нам нужно обьявить функцию check
 */
