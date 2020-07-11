@@ -25,8 +25,14 @@ const mulRational = (rnum1, rnum2) => {
   return makeRational(n, d);
 };
 
+const isEqualRational = (rnum1, rnum2) => numer(rnum1) === numer(rnum2) && denom(rnum1) === denom(rnum2);
+
+const isZeroRational = rnum => numer(rnum) === 0;
+
 module.exports = {
   makeRational,
   addRational,
   mulRational,
+  isEqualRational,
+  isZeroRational,
 };

@@ -29,6 +29,10 @@ const addComplex = (cnum1, cnum2) =>
 const mulComplex = (cnum1, cnum2) =>
   makeFromMagAng(magnitude(cnum1) * magnitude(cnum2), angle(cnum1) + angle(cnum2));
 
+const isEqualComplex = (cnum1, cnum2) => table[cnum1.complexNumType]['isEqual'](cnum1, cnum2);
+
+const isZeroComplex = cnum => table[cnum.complexNumType]['isZero'](cnum);
+
 module.exports = {
   makeFromRealImag,
   makeFromMagAng,
@@ -38,4 +42,6 @@ module.exports = {
   angle,
   addComplex,
   mulComplex,
+  isEqualComplex,
+  isZeroComplex,
 };

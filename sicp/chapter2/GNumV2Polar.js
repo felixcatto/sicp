@@ -10,25 +10,17 @@ const makeFromMagAng = (r, a) => ({
   a,
 });
 
-const realPart = cnum => {
-  console.log('polar realPart');
-  return magnitude(cnum) * cos(angle(cnum));
-};
+const realPart = cnum => magnitude(cnum) * cos(angle(cnum));
 
-const imagePart = cnum => {
-  console.log('polar imagePart');
-  return magnitude(cnum) * sin(angle(cnum));
-};
+const imagePart = cnum => magnitude(cnum) * sin(angle(cnum));
 
-const magnitude = cnum => {
-  console.log('polar magnitude');
-  return cnum.r;
-};
+const magnitude = cnum => cnum.r;
 
-const angle = cnum => {
-  console.log('polar angle');
-  return cnum.a;
-};
+const angle = cnum => cnum.a;
+
+const isEqual = (cnum1, cnum2) => magnitude(cnum1) === magnitude(cnum2) && angle(cnum1) === angle(cnum2);
+
+const isZero = cnum => angle(cnum) === 0;
 
 module.exports = {
   makeFromRealImag,
@@ -37,4 +29,6 @@ module.exports = {
   imagePart,
   magnitude,
   angle,
+  isEqual,
+  isZero,
 };
