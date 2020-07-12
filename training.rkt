@@ -189,13 +189,46 @@
 
 ; (car ''abracadabra)
 
-'()
-(cons 1 nil)
+; '()
+; (cons 1 nil)
 
-(append (list 1 2) (list 3 4))
-(append '() (list 3 4))
+; (append (list 1 2) (list 3 4))
+; (append '() (list 3 4))
 
-(foldl
-  (lambda (el acc) (+ acc el))
-  0
-  '(1 2 5))
+; (foldl
+;   (lambda (el acc) (+ acc el))
+;   0
+;   '(1 2 5))
+
+
+(define balance 100)
+
+(define (withdraw amount)
+  (if (>= balance amount)
+    (begin
+      (set! balance (- balance amount))
+      balance)
+    "Недостаточно денег на счете"))
+
+(withdraw 25)
+(withdraw 25)
+(withdraw 125)
+
+(define (make-withdraw balance)
+  (lambda (amount)
+    (if (>= balance amount)
+      (begin
+        (set! balance (- balance amount))
+        balance)
+      "Недостаточно денег на счете")))
+
+(define nw (make-withdraw 300))
+(nw 100)
+(nw 100)
+(nw 200)
+
+
+
+
+; (lambda x (displayln x))
+; (lambda (x . y) (displayln x))
