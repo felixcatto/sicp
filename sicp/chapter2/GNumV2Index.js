@@ -6,14 +6,7 @@ const {
   isEqualRational,
   isZeroRational,
 } = require('./GNumV2Rational.js');
-const {
-  makeFromRealImag,
-  makeFromMagAng,
-  addComplex,
-  mulComplex,
-  isEqualComplex,
-  isZeroComplex,
-} = require('./GNumV2Complex.js');
+const { makeComplex, addComplex, mulComplex, isEqualComplex, isZeroComplex } = require('./GNumV2Complex.js');
 const { makeConstructor } = require('./libGenerics.js');
 const { strict: assert } = require('assert');
 
@@ -41,13 +34,10 @@ let GenArTable = {
     isZero: isZeroRational,
   },
   complex: {
-    make: ([n1, n2, complexNumType]) => {
-      const make = complexNumType === 'rectangular' ? makeFromRealImag : makeFromMagAng;
-      return {
-        ...make(n1, n2),
-        numType: 'complex',
-      };
-    },
+    make: ([n1, n2, complexNumType]) => ({
+      ...makeComplex(n1, n2, complexNumType),
+      numType: 'complex',
+    }),
     check: args => args.length === 3,
     add: makeConstructor(addComplex, { numType: 'complex' }),
     mul: makeConstructor(mulComplex, { numType: 'complex' }),

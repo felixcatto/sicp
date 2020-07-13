@@ -15,6 +15,9 @@ const makeFromMagAng = makeConstructor(table['polar']['makeFromMagAng'], {
   complexNumType: 'polar',
 });
 
+const makeComplex = (n1, n2, complexNumType) =>
+  complexNumType === 'rectangular' ? makeFromRealImag(n1, n2) : makeFromMagAng(n1, n2);
+
 const realPart = cnum => table[cnum.complexNumType]['realPart'](cnum);
 
 const imagePart = cnum => table[cnum.complexNumType]['imagePart'](cnum);
@@ -34,8 +37,7 @@ const isEqualComplex = (cnum1, cnum2) => table[cnum1.complexNumType]['isEqual'](
 const isZeroComplex = cnum => table[cnum.complexNumType]['isZero'](cnum);
 
 module.exports = {
-  makeFromRealImag,
-  makeFromMagAng,
+  makeComplex,
   realPart,
   imagePart,
   magnitude,

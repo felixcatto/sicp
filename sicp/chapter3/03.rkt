@@ -2,6 +2,8 @@
 (#%require racket)
 (#%require rackunit)
 
+(provide makeAccount)
+
 (define (makeAccount balance password)
   (define wrongPasswordTryCount 0)
   (define (resetWPTCount) (set! wrongPasswordTryCount 0))
@@ -21,8 +23,8 @@
       (begin
         (increaseWPTCount)
         (if (>= wrongPasswordTryCount 3)
-          (lambda (amount) (callTheCops))
-          (lambda (amount) "Неверный пароль")))
+          (callTheCops)
+          "Неверный пароль"))
       (begin
         (resetWPTCount)
         (cond
@@ -42,18 +44,18 @@
   ((acc 'secret-password 'withdraw) 50)
   10)
 (check-equal?
-  ((acc 'some-other-password 'deposit) 50)
+  (acc 'some-other-password 'deposit)
   "Неверный пароль")
 (check-equal?
   ((acc 'secret-password 'deposit) 40)
   50)
 
 (check-equal?
-  ((acc 'some-other-password 'deposit) 50)
+  (acc 'some-other-password 'deposit)
   "Неверный пароль")
 (check-equal?
-  ((acc 'some-other-password 'deposit) 50)
+  (acc 'some-other-password 'deposit)
   "Неверный пароль")
 (check-equal?
-  ((acc 'some-other-password 'deposit) 50)
+  (acc 'some-other-password 'deposit)
   "Enough of this, have at you!")
