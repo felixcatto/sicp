@@ -132,59 +132,27 @@ cnum.realPart();
   с ними зависят от нескольких типов, то лучше не использовать "message passing"
 */
 
-// Generic ariphmethics
-`
-add
-+ / addRat / addComplex
-`;
-
-const GenArTable = {
-  integer: {
-    add: addInt,
-    sub: subInt,
-    mul: mulInt,
-    div: divInt,
-    makeInteger: n => ({ type: 'integer', value: n }),
-  },
-  rational: {
-    add: addRat,
-    sub: subRat,
-    mul: mulRat,
-    div: divRat,
-    makeRational: (n, d) => ({
-      type: 'rational',
-      value: makeRat(n, d),
-    }),
-  },
-  complex: {
-    add: addComplex,
-    sub: subComplex,
-    mul: mulComplex,
-    div: divComplex,
-    makeFromRealImag: (x, y) => ({
-      type: 'complex',
-      value: table['rectangular']['makeFromRealImag'](x, y),
-    }),
-    makeFromMagAng: (r, a) => ({
-      type: 'complex',
-      value: table['polar']['makeFromMagAng'](r, a),
-    }),
-  },
+// DI
+// App.js
+export const app = cnum => {
+  cnum.realPart();
 };
 
-const add = (x, y) => {
-  const type = getType(x);
-  const addFunc = GenArTable[type]['add'];
-  return addFunc(x, y);
-};
+// container.js
+import app from './App';
 
-const makeInteger = n => GenArTable['integer']['makeInteger'](n);
-const makeFromRealImag = (x, y) => GenArTable['complex']['makeFromRealImag'](x, y);
+let cnum = makeFromRealImag(1, 2);
+// or we can use
+// let cnum = makeFromMagAng(1, 2);
+
+app(cnum);
 
 /*
-  Все контструкторы имеют различные имена. Т.е. во время создания num
-  мы должны знать его тип и вручную вызывать соответсвующий make
-  makeRational(num)
-  Если мы хотим иметь общий makeNum(n), который сам разберется каким типом
-  отметить num, то нам нужно обьявить функцию check
+  т.е. мы прокинули в аппу полиморфную сущность cnum. Не важно ректангулярная
+  она или полярная, главное чтобы у нее были методы realPart... 
+  Т.к. (конструкторы/полиморфные сущности) типа (RectangularNum/PolarNum) имеют
+  различные имена, то (сконфигурировать/создать) их мы должны вне аппы.
+  И теперь если мы захотим, то в контейнере мы можем заменить реализацию
+  на полярную, и вся аппа начнет ее использовать без переписывания строчки
+  кода. Другое дело как часто нам нужны полиморфные сущности?
 */
