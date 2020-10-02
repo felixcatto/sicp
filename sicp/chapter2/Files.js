@@ -121,3 +121,73 @@ export {
     * увеличится число геттеров/функций зависящих от типа `write()`
     * увеличится сложность функций `makeSome()`
 `
+
+
+// Пример: 3 геттера/операции, 3 типа, 0 конструкторов
+// `ifSolution`
+const write = file => {
+  if (file.type === 'binary') {
+    console.log('write binary');
+  } else if (file.type === 'text') {
+    console.log('write text');
+  } else if (file.type === 'image') {
+    console.log('write image');
+  }
+};
+
+const read = file => {
+  if (file.type === 'binary') {
+    console.log('read binary');
+  } else if (file.type === 'text') {
+    console.log('read text');
+  } else if (file.type === 'image') {
+    console.log('read image');
+  }
+};
+
+const update = file => {
+  if (file.type === 'binary') {
+    console.log('update binary');
+  } else if (file.type === 'text') {
+    console.log('update text');
+  } else if (file.type === 'image') {
+    console.log('update image');
+  }
+};
+
+const file = {
+  type: 'image',
+  content: 'vasa eto boroda',
+};
+
+write(file);
+
+// `DDP Solution`
+const table = {
+  binary: {
+    write: file => console.log('write binary'),
+    read: file => console.log('read binary'),
+    update: file => console.log('update binary'),
+  },
+  text: {
+    write: file => console.log('write text'),
+    read: file => console.log('read text'),
+    update: file => console.log('update text'),
+  },
+  image: {
+    write: file => console.log('write image'),
+    read: file => console.log('read image'),
+    update: file => console.log('update image'),
+  },
+};
+
+const write = file => table[file.type]['write'](file);
+const read = file => table[file.type]['read'](file);
+const update = file => table[file.type]['update'](file);
+
+const file = {
+  type: 'image',
+  content: 'vasa eto boroda',
+};
+
+write(file);
